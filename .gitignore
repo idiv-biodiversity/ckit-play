@@ -1,0 +1,7 @@
+/logs
+/project/project
+target/
+tmp
+dist
+.cache
+/.ensime
