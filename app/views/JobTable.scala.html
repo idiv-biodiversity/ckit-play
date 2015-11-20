@@ -1,0 +1,17 @@
+@(jobs: Seq[Job])
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Jobs</title>
+  </head>
+  <body>
+    <table>
+      <tr><th>ID</th><th>Name</th></tr>
+      @for(job <- jobs) {
+        <tr><td>@job.id</td><td>@job.name</td></tr>
+      }
+    </table>
+  </body>
+</html>
