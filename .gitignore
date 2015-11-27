@@ -5,3 +5,5 @@ tmp
 dist
 .cache
 /.ensime
+/lib
+/conf/logger.xml

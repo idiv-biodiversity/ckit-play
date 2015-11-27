@@ -11,7 +11,7 @@ object Application extends Controller {
   def index = TODO
 
   def jobs = Action {
-    Ok(views.html.JobTable(GridEngine.qstat))
+    Ok(views.html.JobTable(GridEngine.jobs))
   }
 
 }

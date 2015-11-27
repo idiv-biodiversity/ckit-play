@@ -1,5 +1,18 @@
 @(jobs: Seq[Job])
 
+@jobrow(job: Job) = {
+  <tr>
+    <td>@job.id</td>
+    <td>@job.priority</td>
+    <td>@job.name</td>
+    <td>@job.owner</td>
+    <td>@job.state</td>
+    <td>@job.start</td>
+    <td>@job.queue</td>
+    <td>@job.slots</td>
+  </tr>
+}
+
 <!DOCTYPE html>
 
 <html>
@@ -8,9 +21,18 @@
   </head>
   <body>
     <table>
-      <tr><th>ID</th><th>Name</th></tr>
+      <tr>
+        <th>ID</th>
+        <th>Priority</th>
+        <th>Name</th>
+        <th>Owner</th>
+        <th>State</th>
+        <th>Start</th>
+        <th>Queue</th>
+        <th>Slots</th>
+      </tr>
       @for(job <- jobs) {
-        <tr><td>@job.id</td><td>@job.name</td></tr>
+        @jobrow(job)
       }
     </table>
   </body>
