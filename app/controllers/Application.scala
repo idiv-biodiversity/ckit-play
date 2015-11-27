@@ -14,4 +14,8 @@ object Application extends Controller {
     Ok(views.html.JobTable(GridEngine.jobs))
   }
 
+  def job(id: Long) = Action {
+    Ok(views.html.JobDetail(GridEngine.job(id)))
+  }
+
 }

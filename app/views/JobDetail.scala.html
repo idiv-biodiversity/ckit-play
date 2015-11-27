@@ -1,0 +1,19 @@
+@(job: JobInfo)
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Job: @job.id</title>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <th>Messages</th>
+      </tr>
+      @for(message <- job.messages) {
+        <tr><td>@message</td></tr>
+      }
+    </table>
+  </body>
+</html>

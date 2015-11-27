@@ -1,6 +1,6 @@
 package ckit
 
-import models.Job
+import models._
 
 object GridEngine extends GridEngine
 
@@ -22,6 +22,18 @@ trait GridEngine {
       queue = (job \ "queue_name").text
       slots = (job \ "slots").text.toInt
     } yield Job(id, priority, name, owner, state, start, queue, slots)
+  }
+
+  def job(id: Long): JobInfo = {
+    import sys.process._
+    val output: String = s"qstat -xml -j $id".!!
+    val xml = scala.xml.XML.loadString(output)
+
+    val messages = for {
+      message <- xml \\ "MES_message"
+    } yield message.text
+
+    JobInfo(id, messages)
   }
 
 }

@@ -1,2 +1,3 @@
 GET     /                           controllers.Application.index
 GET     /jobs                       controllers.Application.jobs
+GET     /job/:id                    controllers.Application.job(id: Long)
