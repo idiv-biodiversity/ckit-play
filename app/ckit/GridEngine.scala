@@ -6,9 +6,16 @@ object GridEngine extends GridEngine
 
 trait GridEngine {
 
-  def jobs: Seq[Job] = {
+  def jobs(user: Option[String]): Seq[Job] = {
     import sys.process._
-    val output: String = "qstat -xml -u *".!!
+
+    val output: String = user match {
+      case Some(user) =>
+        s"qstat -xml -u $user".!!
+      case None =>
+        "qstat -xml -u *".!!
+    }
+
     val xml = scala.xml.XML.loadString(output)
 
     for {

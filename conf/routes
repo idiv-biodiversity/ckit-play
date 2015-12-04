@@ -1,5 +1,6 @@
 GET     /                           controllers.Application.index
 GET     /jobs                       controllers.Application.jobs
+GET     /jobs/:user                 controllers.Application.jobsOf(user: String)
 GET     /job/:id                    controllers.Application.job(id: Long)
 
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
