@@ -11,11 +11,19 @@ object Application extends Controller {
   def index = TODO
 
   def jobs = Action {
-    Ok(views.html.JobTable(GridEngine.jobs(None)))
+    val jobs = GridEngine.jobs(None)
+    if (jobs.nonEmpty)
+      Ok(views.html.JobTable(jobs))
+    else
+      Ok(views.html.NoJobs("No Jobs"))
   }
 
   def jobsOf(user: String) = Action {
-    Ok(views.html.JobTable(GridEngine.jobs(Some(user))))
+    val jobs = GridEngine.jobs(Some(user))
+    if (jobs.nonEmpty)
+      Ok(views.html.JobTable(jobs))
+    else
+      Ok(views.html.NoJobs(s"No Jobs of $user"))
   }
 
   def job(id: Long) = Action {
