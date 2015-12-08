@@ -1,0 +1,16 @@
+@(job: RunningJobInfo)
+
+<!-- TODO server chang event stream: update chart(s) for each task -->
+
+@main(s"Job: ${job.id}") {
+<div class="container-fluid">
+  @for((task,usage) <- job.usages) {
+  <div class="row">
+    <div class="col-md-3">Task: @task</div>
+    <div class="col-md-3">Wallclock: @usage.wallclock</div>
+    <div class="col-md-3">CPU: @usage.cpu</div>
+    <div class="col-md-3">Max VMEM: @usage.maxvmem</div>
+  </div>
+  }
+</div>
+}

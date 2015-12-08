@@ -4,7 +4,7 @@ import play.api._
 import play.api.mvc._
 
 import ckit._
-import models.Job
+import models._
 
 object Application extends Controller {
 
@@ -27,7 +27,12 @@ object Application extends Controller {
   }
 
   def job(id: Long) = Action {
-    Ok(views.html.JobDetail(GridEngine.job(id)))
+    GridEngine.job(id) match {
+      case j: RunningJobInfo =>
+        Ok(views.html.JobDetailRunning(j))
+      case j: WaitingJobInfo =>
+        Ok(views.html.JobDetailWaiting(j))
+    }
   }
 
 }

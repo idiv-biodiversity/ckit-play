@@ -1,0 +1,48 @@
+@(job: WaitingJobInfo)
+
+@main(s"Job: ${job.id}") {
+  <div class="container-fluid">
+    <div class="row">id: @job.id</div>
+    <div class="row">reserve: @job.reserve</div>
+    <div class="row">script: @job.script</div>
+    <div class="row">
+      <table class="table table-hover">
+        <tr>
+          <th>Resource</th>
+          <th>Value</th>
+        </tr>
+        @for(resource <- job.resources) {
+          <tr>
+            <td>@resource._1</td>
+            <td>@resource._2</td>
+          </tr>
+        }
+      </table>
+    </div>
+    @if(job.pe.nonEmpty) {
+    <div class="row">
+      <div class="col-md-1"><b>Parallel Environment</b></div>
+      <div class="col-md-1">Name: @job.pe.get.name</div>
+      <div class="col-md-1">Min: @job.pe.get.min</div>
+      <div class="col-md-1">Max: @job.pe.get.max</div>
+      <div class="col-md-1">Step: @job.pe.get.step</div>
+    </div>
+    }
+    @if(job.messages.isEmpty) {
+    <div class="row">No Messages</div>
+    } else {
+    <div class="row">
+      <table class="table table-hover">
+        <tr>
+          <th>Messages</th>
+        </tr>
+        @for(message <- job.messages) {
+          <tr>
+            <td>@message</td>
+          </tr>
+        }
+      </table>
+    </div>
+    }
+  </div>
+}
