@@ -1,13 +1,13 @@
 @(jobs: Seq[Job])
 
 @jobrow(job: Job) = {
-  @if(job.state.contains("r")) {
-  <tr class="success" ng-click="showJob(@job.id)">
-  } else {
-    @if(job.state.contains("E")) {
-  <tr class="danger" ng-click="showJob(@job.id)">
-    } else {
-  <tr ng-click="showJob(@job.id)">
+  @job.state match {
+    case state if state contains "r" => {
+      <tr class="success" ng-click="showJob(@job.id)">
+    } case state if state contains "E" => {
+      <tr class="danger" ng-click="showJob(@job.id)">
+    } case _ => {
+      <tr ng-click="showJob(@job.id)">
     }
   }
     <td>@job.id</td>
