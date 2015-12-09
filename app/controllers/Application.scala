@@ -8,7 +8,10 @@ import models._
 
 object Application extends Controller {
 
-  def index = TODO
+  def index = Action {
+    val name = sys.env get "SGE_CLUSTER_NAME"
+    Ok(views.html.index(name))
+  }
 
   def jobs = Action {
     val jobs = GridEngine.jobs(None)

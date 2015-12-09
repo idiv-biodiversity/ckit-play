@@ -1,0 +1,35 @@
+@(clusterName: Option[String])
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <title>ClusterKit@{clusterName.map(name => s" - $name").getOrElse("")}</title>
+    <!-- link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")"/ -->
+    <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/main.css")" />
+    <style>
+      html, body, .container-table {
+        height: 100%;
+      }
+
+      .container-table {
+        display: table;
+      }
+
+      .vertical-center-row {
+        display: table-cell;
+        vertical-align: middle;
+      }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <div class="container container-table">
+      <div class="row vertical-center-row">
+        <div class="text-center col-md-4 col-md-offset-4">
+          <a href="/jobs">/jobs</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
