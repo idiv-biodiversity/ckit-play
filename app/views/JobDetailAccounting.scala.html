@@ -1,0 +1,15 @@
+@(job: AccountingJobInfo)
+
+@main(s"Accounting: ${job.id}") {
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">Slots: @job.slots</div>
+    <div class="col-md-3">Wallclock: @job.usage.wallclock</div>
+    <div class="col-md-3">CPU: @job.usage.cpu</div>
+    <div class="col-md-3">Max VMEM: @job.usage.maxvmem</div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">Efficiency: @job.humanEfficiency</div>
+  </div>
+</div>
+}

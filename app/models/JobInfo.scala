@@ -6,6 +6,22 @@ sealed abstract class JobInfo {
   def id: Long
 }
 
+case class AccountingJobInfo(
+  id: Long,
+  slots: Int,
+  usage: Usage
+) extends JobInfo {
+  def efficiency: Double = {
+    import usage._
+    cpu.toDouble / slots / wallclock.toDouble
+  }
+
+  def humanEfficiency: String = {
+    val percent = (efficiency * 10000).round.toDouble / 100.0
+    s"""${percent}%"""
+  }
+}
+
 case class RunningJobInfo(
   id: Long,
   usages: Seq[(Long,Usage)]

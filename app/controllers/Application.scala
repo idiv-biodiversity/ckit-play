@@ -28,10 +28,14 @@ object Application extends Controller {
 
   def job(id: Long) = Action {
     GridEngine.job(id) match {
-      case j: RunningJobInfo =>
+      case Some(j: RunningJobInfo) =>
         Ok(views.html.JobDetailRunning(j))
-      case j: WaitingJobInfo =>
+      case Some(j: WaitingJobInfo) =>
         Ok(views.html.JobDetailWaiting(j))
+      case Some(j: AccountingJobInfo) =>
+        Ok(views.html.JobDetailAccounting(j))
+      case None =>
+        Ok(views.html.UnknownJob(id))
     }
   }
 

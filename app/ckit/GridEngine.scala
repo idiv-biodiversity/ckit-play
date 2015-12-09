@@ -6,6 +6,9 @@ object GridEngine extends GridEngine
 
 trait GridEngine {
 
+  type XML = scala.xml.Elem
+  val XML = scala.xml.XML
+
   def jobs(user: Option[String]): Seq[Job] = {
     import sys.process._
 
@@ -16,7 +19,7 @@ trait GridEngine {
         "qstat -xml -u *".!!
     }
 
-    val xml = scala.xml.XML.loadString(output)
+    val xml = XML.loadString(output)
 
     for {
       job <- xml \\ "job_list"
@@ -31,11 +34,20 @@ trait GridEngine {
     } yield Job(id, priority, name, owner, state, start, queue, slots)
   }
 
-  def isRunning(xml: scala.xml.Elem): Boolean = {
+  def isRunning(xml: XML): Boolean = {
     (xml \\ "JAT_start_time").size > 0
   }
 
-  def runningJob(id: Long, xml: scala.xml.Elem): RunningJobInfo = {
+  val PosInt = """([1-9]\d*)""".r
+
+  def isUnknown(id: Long, xml: XML): Boolean = {
+    (xml \\ "unknown_jobs" \ "element" \ "ST_name").text match {
+      case PosInt(x) if x.toLong == id => true
+      case _ => false
+    }
+  }
+
+  def runningJob(id: Long, xml: XML): RunningJobInfo = {
     val usages = for {
       task <- xml \\ "JB_ja_tasks" \ "element"
       taskid = (task \ "JAT_task_number").text.toLong
@@ -59,7 +71,7 @@ trait GridEngine {
     RunningJobInfo(id, usages.sortBy(_._1).toList)
   }
 
-  def waitingJob(id: Long, xml: scala.xml.Elem): WaitingJobInfo = {
+  def waitingJob(id: Long, xml: XML): WaitingJobInfo = {
     var messages = for {
       message <- xml \\ "MES_message"
     } yield message.text
@@ -113,15 +125,35 @@ trait GridEngine {
     s"qalter -w p $id".lineStream_!.toList
   }
 
-  def job(id: Long): JobInfo = {
+  def checkAccounting(id: Long): Option[AccountingJobInfo] = {
+    import sys.process._
+    import cats.std.option._
+    import cats.syntax.apply._
+
+    val output: List[String] = s"qacct -j $id".lineStream_!.toList
+
+    val wallclock = output find { _ startsWith "wallclock" } flatMap { _.split(" ").lastOption }
+    val cpu = output find { _ startsWith "cpu" } flatMap { _.split(" ").lastOption }
+    val maxvmem = output find { _ startsWith "maxvmem" } flatMap { _.split(" ").lastOption }
+    val slots = output find { _ startsWith "slots" } flatMap { _.split(" ").lastOption.map(_.toInt) }
+
+    (wallclock |@| cpu |@| maxvmem |@| slots) map {
+      case (wallclock,cpu,maxvmem,slots) =>
+        AccountingJobInfo(id, slots, Usage(wallclock, cpu, maxvmem))
+    }
+  }
+
+  def job(id: Long): Option[JobInfo] = {
     import sys.process._
     val output: String = s"qstat -xml -j $id".!!
-    val xml = scala.xml.XML.loadString(output)
+    val xml = XML.loadString(output)
 
-    if (isRunning(xml))
-      runningJob(id, xml)
+    if (isUnknown(id, xml))
+      checkAccounting(id)
+    else if (isRunning(xml))
+      Some(runningJob(id, xml))
     else
-      waitingJob(id, xml)
+      Some(waitingJob(id, xml))
   }
 
 }

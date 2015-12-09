@@ -5,6 +5,7 @@ version := "0.1.0"
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 libraryDependencies ++= Seq (
+  "org.spire-math" %% "cats" % "0.3.0",
   "org.webjars" %% "webjars-play" % "2.4.0-2",
   "org.webjars" %  "bootstrap"    % "3.3.6",
   "org.webjars" %  "angularjs"    % "1.4.8",
