@@ -9,7 +9,7 @@
     <div class="col-md-3">Task: @task</div>
     <div class="col-md-3">Wallclock: @usage.wallclock</div>
     <div class="col-md-3">CPU: @usage.cpu</div>
-    <div class="col-md-3">Max VMEM: @usage.maxvmem</div>
+    <div class="col-md-3">Max VMEM: @util.Humanize.memory(usage.maxvmem.toDouble)</div>
   </div>
   }
 </div>
