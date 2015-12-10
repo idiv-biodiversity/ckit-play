@@ -31,7 +31,8 @@ trait GridEngine {
       start = (job \ "JAT_start_time").text
       queue = (job \ "queue_name").text
       slots = (job \ "slots").text.toInt
-    } yield Job(id, priority, name, owner, state, start, queue, slots)
+      tasks = (job \ "tasks").text
+    } yield Job(id, priority, name, owner, state, start, queue, slots, tasks)
   }
 
   def isRunning(xml: XML): Boolean = {
